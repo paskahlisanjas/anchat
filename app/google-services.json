@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "93431922925",
+    "firebase_url": "https://anchat-a549b.firebaseio.com",
+    "project_id": "anchat-a549b",
+    "storage_bucket": "anchat-a549b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93431922925:android:2fc1fd282fec6bd5",
+        "android_client_info": {
+          "package_name": "com.android.paskahlis.anchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "93431922925-73r8ek8tj664r29f6a3jnejece0oc7r0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.paskahlis.anchat",
+            "certificate_hash": "0ac220c48573f17c94076c10cabe0f5b07e7f752"
+          }
+        },
+        {
+          "client_id": "93431922925-oegckhe4hvqb600lnk03ho4ti1i9iuk4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_EGbwlokybZ7h9_TgR6_LA9BuEjRrI2s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "93431922925-oegckhe4hvqb600lnk03ho4ti1i9iuk4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
