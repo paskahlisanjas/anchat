@@ -24,25 +24,27 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/box_rounded"
+            android:background="@drawable/box_rounded_stroke"
             android:layout_margin="10dp"
             android:paddingEnd="16dp"
             android:paddingStart="16dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:hint="username"
+            android:textColor="@color/white"
             android:textColorHint="@color/white"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/box_rounded"
+            android:background="@drawable/box_rounded_stroke"
             android:layout_margin="10dp"
             android:paddingEnd="16dp"
             android:paddingStart="16dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:hint="password"
+            android:textColor="@color/white"
             android:textColorHint="@color/white"/>
 
         <Button
@@ -57,8 +59,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/don_t_have_an_account"
-            android:textColor="@color/white"
+            android:textColor="@color/colorPrimary"
             android:layout_gravity="center_horizontal"
+            android:background="@drawable/box_rounded_solid"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
             android:onClick="getToRegister"/>
 
     </LinearLayout>
