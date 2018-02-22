@@ -14,19 +14,33 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = "[ANCHAT]";
+    private static final String TAG = "ANCHAT";
+    private static final String GOOGLE_SERVER_CLIENT_ID = "93431922925-oegckhe4hvqb600lnk03ho4ti1i9iuk4.apps.googleusercontent.com";
+    private static final int GOOGLE_SIGN_IN_REQUEST_CODE = 12;
+
     private EditText editTextEmailAddress;
     private EditText editTextPassword;
-    private Button buttonLogin;
+
+    private Button buttonLoginEmailPassword;
+    private Button buttonLoginGoogle;
 
     private FirebaseAuth firebaseAuth;
+    private GoogleSignInClient googleSignInClient;
 
     private Activity activity = this;
 
@@ -40,20 +54,40 @@ public class LoginActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(GOOGLE_SERVER_CLIENT_ID).requestEmail().build();
+        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+
         editTextEmailAddress = (EditText) findViewById(R.id.edit_text_email_address);
         editTextPassword = (EditText) findViewById(R.id.edit_text_password);
-        buttonLogin = (Button) findViewById(R.id.button_login);
 
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
+        buttonLoginEmailPassword = (Button) findViewById(R.id.button_login_email_password);
+        buttonLoginGoogle = (Button) findViewById(R.id.button_login_google);
+
+        buttonLoginEmailPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                login();
+            }
+
+            private void login() {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 if (!isFormCompleted()) return;
-                loginUser(
+                loginWithEmailAndPassword(
                         editTextEmailAddress.getText().toString(),
                         editTextPassword.getText().toString()
                 );
+            }
+        });
+        buttonLoginGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                login();
+            }
+
+            private void login() {
+                loginWithGoogle();
             }
         });
     }
@@ -70,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    private void loginUser(String email, String password) {
+    private void loginWithEmailAndPassword(String email, String password) {
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("authenticating...");
         dialog.show();
@@ -94,6 +128,30 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    private void loginWithGoogle() {
+        Intent signInIntent = googleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE);
+    }
+
+    private void googleAuthentication(final GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                             Intent intent = new Intent(activity, MainActivity.class);
+                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                             startActivity(intent);
+                        } else {
+                            FirebaseException exception = (FirebaseException) task.getException();
+                            Log.d(TAG, "Login with google failed. " + exception.getMessage());
+                            Toast.makeText(activity, "Login failed, please try again", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
     public void getToRegister(View view) {
         Intent intent = new Intent(this, RegisterActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -102,5 +160,23 @@ public class LoginActivity extends AppCompatActivity {
 
     public void resetUserPassword(View view) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case GOOGLE_SIGN_IN_REQUEST_CODE:
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                GoogleSignInAccount account = null;
+                try {
+                    account = task.getResult(ApiException.class);
+                    googleAuthentication(account);
+                } catch (ApiException e) {
+                    Log.d(TAG, "Login with google failed. " + e.getMessage());
+                }
+                break;
+        }
     }
 }

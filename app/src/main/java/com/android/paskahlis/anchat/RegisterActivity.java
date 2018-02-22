@@ -32,7 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private Activity activity = this;
 
-    private final String TAG = "[ANCHAT]";
+    private final String TAG = "ANCHAT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
