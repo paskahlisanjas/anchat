@@ -7,6 +7,7 @@ import android.renderscript.ScriptGroup;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -16,18 +17,22 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 
 public class RegisterActivity extends AppCompatActivity {
-    Button buttonRegister;
-    EditText editTextEmailAddress;
-    EditText editTextPassword;
-    EditText editTextConfirmPassword;
+    private Button buttonRegister;
+    private EditText editTextEmailAddress;
+    private EditText editTextPassword;
+    private EditText editTextConfirmPassword;
 
-    FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
 
-    Activity activity = this;
+    private Activity activity = this;
+
+    private final String TAG = "[ANCHAT]";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +97,12 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         dialog.cancel();
                         if (task.isSuccessful()) {
-                            Toast.makeText(activity, "Registration success, check your " +
-                                    "emaiil for confirmation.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(activity, "Registration success.", Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(activity, "Something went wrong, please try again.",
                                     Toast.LENGTH_SHORT).show();
+                            FirebaseException exception = (FirebaseException) task.getException();
+                            Log.d(TAG, "Failed registration. " + exception.getMessage());
                         }
                     }
                 });
