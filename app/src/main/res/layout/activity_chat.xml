@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp" />
+        android:layout_marginStart="16dp" />
 
     <EditText
         android:id="@+id/edit_text_message_input"

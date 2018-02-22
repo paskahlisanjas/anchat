@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.paskahlis.anchat.R;
@@ -37,23 +38,23 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageRecycler
         EntityChat chat = chatList.get(position);
         EntityChatContent content = chat.getContent();
         if (content.getMessageContentType() == EntityChatContent.MESSAGE_CONTENT_TYPE_TEXT) {
-            holder.fileNameIn.setVisibility(View.GONE);
-            holder.filenameOut.setVisibility(View.GONE);
+            holder.containerFileIn.setVisibility(View.GONE);
+            holder.containerFileOut.setVisibility(View.GONE);
             if (chat.getMessageDirection() == EntityChat.MESSAGE_DIRECTION_IN) {
                 holder.textIn.setText((String) content.getMessage());
-                holder.textOut.setVisibility(View.GONE);
+                holder.containerTextOut.setVisibility(View.GONE);
             } else {
                 holder.textOut.setText((String) content.getMessage());
-                holder.textIn.setVisibility(View.GONE);
+                holder.containerTextOut.setVisibility(View.GONE);
             }
         } else {
-            holder.textOut.setVisibility(View.GONE);
-            holder.textIn.setVisibility(View.GONE);
+            holder.containerTextOut.setVisibility(View.GONE);
+            holder.containerTextIn.setVisibility(View.GONE);
             if (chat.getMessageDirection() == EntityChat.MESSAGE_DIRECTION_IN) {
-                holder.filenameOut.setVisibility(View.GONE);
+                holder.containerFileOut.setVisibility(View.GONE);
                 holder.fileNameIn.setText((String) content.getMessage());
             } else {
-                holder.fileNameIn.setVisibility(View.GONE);
+                holder.containerFileIn.setVisibility(View.GONE);
                 holder.filenameOut.setText((String) content.getMessage());
             }
         }
@@ -66,6 +67,7 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageRecycler
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView fileNameIn, filenameOut, textIn, textOut;
+        LinearLayout containerFileIn, containerFileOut, containerTextIn, containerTextOut;
 
         public ViewHolder(View view) {
             super(view);
@@ -73,6 +75,11 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageRecycler
             fileNameIn = (TextView) view.findViewById(R.id.file_name_in);
             textIn = (TextView) view.findViewById(R.id.message_text_in);
             textOut = (TextView) view.findViewById(R.id.message_text_out);
+
+            containerFileIn = (LinearLayout) view.findViewById(R.id.container_message_in_file);
+            containerFileOut = (LinearLayout) view.findViewById(R.id.container_message_out_file);
+            containerTextIn = (LinearLayout) view.findViewById(R.id.container_message_in_text);
+            containerTextOut = (LinearLayout) view.findViewById(R.id.container_message_out_text);
         }
     }
 
