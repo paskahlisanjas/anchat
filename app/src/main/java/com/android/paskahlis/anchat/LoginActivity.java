@@ -1,6 +1,7 @@
 package com.android.paskahlis.anchat;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -70,14 +71,21 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(String email, String password) {
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("processing...");
+        dialog.show();
+
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        dialog.cancel();
                         if (task.isSuccessful()) {
-                            
+                            Intent intent = new Intent(activity, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
                         } else {
-                            Toast.makeText(activity, "Something went wrong, please try again.",
+                            Toast.makeText(activity, "Login failed, please try again.",
                                     Toast.LENGTH_SHORT).show();
                             FirebaseException exception = (FirebaseException) task.getException();
                             Log.d(TAG, "Failed login. " + exception.getMessage());

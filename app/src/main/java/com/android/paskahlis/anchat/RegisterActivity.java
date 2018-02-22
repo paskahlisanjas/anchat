@@ -99,7 +99,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(activity, "Registration success.", Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(activity, "Something went wrong, please try again.",
+                            Toast.makeText(activity, "Registration failed, please try again.",
                                     Toast.LENGTH_SHORT).show();
                             FirebaseException exception = (FirebaseException) task.getException();
                             Log.d(TAG, "Failed registration. " + exception.getMessage());
