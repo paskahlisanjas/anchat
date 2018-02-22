@@ -22,7 +22,7 @@ public class SplashActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Intent intent = new Intent(activity, LoginActivity.class);
+                Intent intent = new Intent(activity, ChatActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
