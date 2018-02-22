@@ -104,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/box_rounded_solid"
+                    android:background="@drawable/box_rounded_solid_white"
                     android:onClick="getToLogin"
                     android:paddingBottom="2dp"
                     android:paddingLeft="8dp"

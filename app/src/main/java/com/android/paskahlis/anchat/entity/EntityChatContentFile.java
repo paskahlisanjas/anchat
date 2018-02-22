@@ -9,18 +9,19 @@ import android.view.View;
 public class EntityChatContentFile extends EntityChatContent {
     private final int MESSAGE_CONTENT_TYPE = MESSAGE_CONTENT_TYPE_TEXT;
 
-    private View messageView;
+    private String fileName;
+
+    public EntityChatContentFile(String fileName) {
+        this.fileName = fileName;
+    }
+
+    @Override
+    public Object getMessage() {
+        return fileName;
+    }
 
     @Override
     public int getMessageContentType() {
         return MESSAGE_CONTENT_TYPE;
-    }
-
-    public View getMessageView() {
-        return messageView;
-    }
-
-    public void setMessageView(View view) {
-        messageView = view;
     }
 }

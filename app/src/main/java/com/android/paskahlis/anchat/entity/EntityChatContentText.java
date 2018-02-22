@@ -9,7 +9,11 @@ import android.view.View;
 public class EntityChatContentText extends EntityChatContent {
     private final int MESSAGE_CONTENT_TYPE = MESSAGE_CONTENT_TYPE_TEXT;
 
-    private View messageView;
+    private String message;
+
+    public EntityChatContentText(String message) {
+        this.message = message;
+    }
 
     @Override
     public int getMessageContentType() {
@@ -17,11 +21,7 @@ public class EntityChatContentText extends EntityChatContent {
     }
 
     @Override
-    public View getMessageView() {
-        return messageView;
-    }
-
-    public void setMessageView(View view) {
-        messageView = view;
+    public Object getMessage() {
+        return message;
     }
 }

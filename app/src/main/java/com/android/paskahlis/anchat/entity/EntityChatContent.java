@@ -13,8 +13,7 @@ public class EntityChatContent {
     public int getMessageContentType() {
         return -1;
     }
-
-    public View getMessageView() {
+    public Object getMessage() {
         return null;
     }
 }
