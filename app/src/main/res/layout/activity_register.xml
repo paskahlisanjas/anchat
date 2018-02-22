@@ -32,6 +32,21 @@
                 android:orientation="vertical">
 
                 <EditText
+                    android:id="@+id/edit_text_display_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/box_rounded_stroke"
+                    android:hint="display name"
+                    android:inputType="text"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white" />
+
+                <EditText
                     android:id="@+id/edit_text_email_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

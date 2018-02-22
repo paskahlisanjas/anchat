@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">anchat</string>
-    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="don_t_have_an_account">Register manually</string>
     <string name="forgot_password">forgot password?</string>
 </resources>

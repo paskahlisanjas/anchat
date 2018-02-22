@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser(String email, String password) {
         final ProgressDialog dialog = new ProgressDialog(this);
-        dialog.setMessage("processing...");
+        dialog.setMessage("authenticating...");
         dialog.show();
 
         firebaseAuth.signInWithEmailAndPassword(email, password)
