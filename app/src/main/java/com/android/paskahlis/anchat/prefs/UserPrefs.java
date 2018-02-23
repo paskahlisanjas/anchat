@@ -5,7 +5,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
-import com.android.paskahlis.anchat.model.User;
+
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 
 /**
@@ -42,13 +43,13 @@ public class UserPrefs {
         getSharedPreferences(context).edit().putString(KEY_TOKEN, token).apply();
     }
 
-    public static User getUser(Context context) {
+    public static FirebaseUser getUser(Context context) {
         String json = getSharedPreferences(context).getString(KEY_PROFILE_USER, null);
         if (TextUtils.isEmpty(json)) return null;
-        return new Gson().fromJson(json, User.class);
+        return new Gson().fromJson(json, FirebaseUser.class);
     }
 
-    public static void saveUser(Context context, User user) {
+    public static void saveUser(Context context, FirebaseUser user) {
         Gson gson = new Gson();
         String userJson = gson.toJson(user);
         getSharedPreferences(context).edit().putString(KEY_PROFILE_USER, userJson).apply();
