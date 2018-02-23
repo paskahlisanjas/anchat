@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+
+import com.android.paskahlis.anchat.prefs.UserPrefs;
 
 public class SplashActivity extends AppCompatActivity {
     Activity activity = this;
@@ -22,9 +25,15 @@ public class SplashActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Intent intent = new Intent(activity, ChatActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                if (UserPrefs.getKeyToken(activity) != null) {
+                    Intent intent = new Intent(activity, ChatActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                } else {
+                    Intent loginIntent = new Intent(activity, LoginActivity.class);
+                    startActivity(loginIntent);
+                }
+                finish();
             }
         }).start();
     }
