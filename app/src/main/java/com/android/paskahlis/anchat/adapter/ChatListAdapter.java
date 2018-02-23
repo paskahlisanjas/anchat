@@ -40,7 +40,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
         }
     }
 
-    public ChatListAdapter (List<ChatPreview> chatPreviews, Context  context){
+    public ChatListAdapter (Context  context, List<ChatPreview> chatPreviews){
         this.mChat = chatPreviews;
         this.mContext = context;
     }
@@ -61,7 +61,12 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
         holder.senderName.setText(chat.getName());
         holder.chatMessage.setText(chat.getTextChat());
         holder.timestamp.setText(chat.getTimestamp());
-        Glide.with(mContext).load(chat.getProfilePic()).into(holder.senderProfilePic);
+        if (chat.getProfilePic().equalsIgnoreCase("")){
+            holder.senderProfilePic.setBackgroundResource(R.drawable.default_profile_pic);
+        } else {
+            Glide.with(mContext).load(chat.getProfilePic()).into(holder.senderProfilePic);
+        }
+
     }
 
     @Override

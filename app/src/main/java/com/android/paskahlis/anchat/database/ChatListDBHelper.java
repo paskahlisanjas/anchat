@@ -2,10 +2,14 @@ package com.android.paskahlis.anchat.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.android.paskahlis.anchat.model.ChatPreview;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by fajar on 22/02/18.
@@ -44,7 +48,7 @@ public class ChatListDBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addChat(ChatPreview chat){
+    public void addChat(ChatPreview chat) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -54,15 +58,44 @@ public class ChatListDBHelper extends SQLiteOpenHelper {
         values.put(KEY_CHAT, chat.getTextChat());
         values.put(KEY_TIMESTAMP, chat.getTimestamp());
 
-        db.insertWithOnConflict(TABLE_CHATS,null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        db.insertWithOnConflict(TABLE_CHATS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
     }
 
-    public void removeChat(ChatPreview chat){
+    public void removeChat(String email) {
         SQLiteDatabase db = this.getWritableDatabase();
 
 
-        db.delete(TABLE_CHATS, KEY_EMAIL + "=" + chat.getEmail(),null);
+        db.delete(TABLE_CHATS, KEY_EMAIL + "= ?" ,new String[] { email });
         db.close();
     }
+
+    public List<ChatPreview> getAllChats (){
+        List<ChatPreview> chatList = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TABLE_CHATS;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                ChatPreview chat = new ChatPreview();
+                chat.setEmail(cursor.getString(0));
+                chat.setName(cursor.getString(1));
+                chat.setProfilePic(cursor.getString(2));
+                chat.setTextChat(cursor.getString(3));
+                chat.setTimestamp(cursor.getString(4));
+                // Adding contact to list
+                chatList.add(chat);
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return chatList;
+
+    }
+
+
 }
