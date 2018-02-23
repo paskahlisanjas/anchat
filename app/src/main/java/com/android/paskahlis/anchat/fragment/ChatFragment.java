@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.android.paskahlis.anchat.R;
 import com.android.paskahlis.anchat.adapter.ChatListAdapter;
+import com.android.paskahlis.anchat.database.ChatListDBHelper;
 import com.android.paskahlis.anchat.listener.ClickListener;
 import com.android.paskahlis.anchat.listener.RecyclerTouchListener;
 import com.android.paskahlis.anchat.model.ChatPreview;
@@ -39,6 +40,7 @@ public class ChatFragment extends Fragment {
     private ChatListAdapter mAdapter;
     private List<ChatPreview> chatList = null;
     private RecyclerView.LayoutManager mLayoutManager;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -74,8 +76,7 @@ public class ChatFragment extends Fragment {
         chatListRecyclerView    = rootView.findViewById(R.id.chat_list);
         newChat                 = rootView.findViewById(R.id.new_chat);
 
-        chatList = new ArrayList<>();
-        insertChatDummy();
+        getChatFromDB();
 
         mAdapter    = new ChatListAdapter(getActivity(), chatList);
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -99,21 +100,17 @@ public class ChatFragment extends Fragment {
         return rootView;
     }
 
-    public void insertChatDummy(){
-        ChatPreview chat;
-
-        for (int i = 0; i < 10; i++) {
-            chat = new ChatPreview();
-            chat.setEmail("13515060@std.stei.itb.ac.id");
-            chat.setName("Fajar Nugroho");
-            chat.setProfilePic("");
-            chat.setTextChat("Halo");
-            chat.setTimestamp("18:00");
-
-            chatList.add(chat);
-        }
+    private void getChatFromDB () {
+        ChatListDBHelper db = new ChatListDBHelper(getActivity());
+        ChatPreview chat = new ChatPreview();
+        chat.setEmail("13515060@std.stei.itb.ac.id");
+        chat.setName("Fajar");
+        chat.setProfilePic("");
+        chat.setTextChat("Halo");
+        chat.setTimestamp("19:08");
+        db.addChat(chat);
+        chatList = db.getAllChats();
     }
-
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);

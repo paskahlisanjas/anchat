@@ -108,7 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
                         dialog.cancel();
                         if (task.isSuccessful()) {
                             EntityUser user = new EntityUser(displayName, null,
-                                    0d, 0d, null);
+                                    0d, 0d, null, "");
                             FirebaseUser fu = firebaseAuth.getCurrentUser();
                             databaseReference.child(fu.getUid()).setValue(user).addOnCompleteListener(
                                     new OnCompleteListener<Void>() {

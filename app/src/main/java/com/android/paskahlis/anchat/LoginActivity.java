@@ -168,7 +168,7 @@ public class LoginActivity extends AppCompatActivity {
                                             if (!dataSnapshot.exists()) {
                                                 EntityUser user = new EntityUser(account.getDisplayName(),
                                                         null, 0d, 0d,
-                                                        account.getPhotoUrl().toString());
+                                                        account.getPhotoUrl().toString(), "");
                                                 databaseReference.child(fu.getUid()).setValue(user);
                                                 Intent intent = new Intent(activity, MainActivity.class);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

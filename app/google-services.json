@@ -15,7 +15,14 @@
       },
       "oauth_client": [
         {
-
+          "client_id": "93431922925-i5pkdd485v0furq625mrkc9fo85c2tb7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.paskahlis.anchat",
+            "certificate_hash": "681016f991ee2d531301f997f49902870a1cb8ea"
+          }
+        },
+        {
           "client_id": "93431922925-0d6cejs0hdugrr9hm0mhhc3o9ph0idt8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -30,8 +37,7 @@
             "package_name": "com.android.paskahlis.anchat",
             "certificate_hash": "0ac220c48573f17c94076c10cabe0f5b07e7f752"
           }
-        }
-	,
+        },
         {
           "client_id": "93431922925-oegckhe4hvqb600lnk03ho4ti1i9iuk4.apps.googleusercontent.com",
           "client_type": 3

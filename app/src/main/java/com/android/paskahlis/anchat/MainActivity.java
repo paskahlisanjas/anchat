@@ -7,19 +7,20 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.android.paskahlis.anchat.adapter.MainViewPagerAdapter;
 import com.android.paskahlis.anchat.fragment.ChatFragment;
 import com.android.paskahlis.anchat.widget.NavBarViewPager;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
     private MainViewPagerAdapter mainViewPagerAdapter;
     private NavBarViewPager mViewPager;
     private List<Fragment> mFrags;
@@ -32,15 +33,12 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_contact:
-                    mTextMessage.setText(R.string.title_chat);
                     mViewPager.setCurrentItem(0);
                     return true;
                 case R.id.navigation_chat:
-                    mTextMessage.setText(R.string.title_chat);
                     mViewPager.setCurrentItem(0);
                     return true;
                 case R.id.navigation_settings:
-                    mTextMessage.setText(R.string.title_setting);
                     mViewPager.setCurrentItem(0);
                     return true;
             }
@@ -53,10 +51,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
+        getSupportActionBar().setTitle("AnChat");
+//        getActionBar().setTitle("AnChat");
         mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager());
 
         mainViewPagerAdapter.addFragment(ChatFragment.newInstance());
@@ -64,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         mViewPager.setAdapter(mainViewPagerAdapter);
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setSelectedItemId(R.id.navigation_chat);
+
+
 
     }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.android.paskahlis.anchat.model.ChatPreview;
 
@@ -35,8 +36,8 @@ public class ChatListDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CHATS_TABLE = "CREATE TABLE " + TABLE_CHATS + "(" +
                 KEY_EMAIL + " VARCHAR(32) PRIMARY KEY, " + KEY_NAME +
-                "VARCHAR(32), " + KEY_PIC + " TEXT," + KEY_CHAT +
-                " TEXT, " + KEY_TIMESTAMP + " VARCHAR(64))";
+                " VARCHAR(32), " + KEY_PIC + " TEXT," + KEY_CHAT +
+                " TEXT, " + KEY_TIMESTAMP + " VARCHAR(64));";
         db.execSQL(CREATE_CHATS_TABLE);
     }
 
@@ -60,6 +61,7 @@ public class ChatListDBHelper extends SQLiteOpenHelper {
 
         db.insertWithOnConflict(TABLE_CHATS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
+        Log.d("DB", "tambah chat");
     }
 
     public void removeChat(String email) {
