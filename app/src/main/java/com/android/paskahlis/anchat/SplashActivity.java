@@ -34,7 +34,7 @@ public class SplashActivity extends AppCompatActivity {
                 if (firebaseAuth.getCurrentUser() != null) {
                     intent  = new Intent(activity, ChatActivity.class);
                 } else {
-                    intent  = new Intent(activity, LoginActivity.class);
+                    intent  = new Intent(activity, MainActivity.class);
                 }
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
