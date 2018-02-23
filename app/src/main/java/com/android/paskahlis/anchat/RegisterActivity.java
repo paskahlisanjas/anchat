@@ -3,7 +3,6 @@ package com.android.paskahlis.anchat;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.renderscript.ScriptGroup;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,20 +14,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.paskahlis.anchat.entity.EntityUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
+    private final String USER_ROOT = "users";
+
     private Button buttonRegister;
+    private EditText editTextDisplayName;
     private EditText editTextEmailAddress;
     private EditText editTextPassword;
     private EditText editTextConfirmPassword;
 
     private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = database.getReference().child(EntityUser.USER_ROOT);
 
     private Activity activity = this;
 
@@ -45,6 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         buttonRegister = (Button) findViewById(R.id.button_register);
+        editTextDisplayName = (EditText) findViewById(R.id.edit_text_display_name);
         editTextEmailAddress = (EditText) findViewById(R.id.edit_text_email_address);
         editTextPassword = (EditText) findViewById(R.id.edit_text_password);
         editTextConfirmPassword = (EditText) findViewById(R.id.edit_text_confirm_password);
@@ -57,7 +65,8 @@ public class RegisterActivity extends AppCompatActivity {
                 if (!isFormCompleted()) return;
                 registerUser(
                         editTextEmailAddress.getText().toString(),
-                        editTextPassword.getText().toString()
+                        editTextPassword.getText().toString(),
+                        editTextDisplayName.getText().toString()
                 );
             }
         });
@@ -70,7 +79,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean isFormCompleted() {
-        boolean temp = isFieldFilled(editTextEmailAddress)
+        boolean temp = isFieldFilled(editTextDisplayName)
+                && isFieldFilled(editTextEmailAddress)
                 && isFieldFilled(editTextPassword)
                 && isFieldFilled(editTextConfirmPassword);
         temp = temp ? editTextPassword.getText().toString().equals(editTextConfirmPassword
@@ -86,7 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
         return true;
     }
 
-    private void registerUser(String email, String password) {
+    private void registerUser(final String email, String password, final String displayName) {
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("processing...");
         dialog.show();
@@ -97,7 +107,27 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         dialog.cancel();
                         if (task.isSuccessful()) {
-                            Toast.makeText(activity, "Registration success.", Toast.LENGTH_LONG).show();
+                            EntityUser user = new EntityUser(displayName, null,
+                                    0d, 0d, null);
+                            FirebaseUser fu = firebaseAuth.getCurrentUser();
+                            databaseReference.child(fu.getUid()).setValue(user).addOnCompleteListener(
+                                    new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(activity, "Registration success.", Toast.LENGTH_LONG).show();
+                                                Intent intent = new Intent(activity, MainActivity.class);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                startActivity(intent);
+                                            } else {
+                                                Toast.makeText(activity, "Failed to store to database.",
+                                                        Toast.LENGTH_SHORT).show();
+                                                FirebaseException exception = (FirebaseException) task.getException();
+                                                Log.d(TAG, "Failed to store to database. " + exception.getMessage());
+                                            }
+                                        }
+                                    }
+                            );
                         } else {
                             Toast.makeText(activity, "Registration failed, please try again.",
                                     Toast.LENGTH_SHORT).show();
