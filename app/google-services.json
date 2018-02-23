@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "93431922925-i5pkdd485v0furq625mrkc9fo85c2tb7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.paskahlis.anchat",
+            "certificate_hash": "681016f991ee2d531301f997f49902870a1cb8ea"
+          }
+        },
+        {
+          "client_id": "93431922925-0d6cejs0hdugrr9hm0mhhc3o9ph0idt8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.paskahlis.anchat",
+            "certificate_hash": "f505d1c6064b1bc16300d1cd67d587541a744887"
+          }
+        },
+        {
           "client_id": "93431922925-73r8ek8tj664r29f6a3jnejece0oc7r0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
