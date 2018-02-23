@@ -22,5 +22,4 @@
             android:label="@string/title_activity_main" />
         <activity android:name=".ChatActivity"></activity>
     </application>
-
 </manifest>

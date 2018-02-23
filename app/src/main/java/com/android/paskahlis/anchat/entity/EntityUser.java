@@ -1,7 +1,5 @@
 package com.android.paskahlis.anchat.entity;
 
-import android.net.Uri;
-
 import java.util.List;
 
 /**
@@ -13,7 +11,7 @@ public class EntityUser {
 
     private String displayName;
     private List<String> contactList;
-    private Double altitude;
+    private Double latitude;
     private Double longitude;
     private String profilePictureUrl;
 
@@ -21,16 +19,16 @@ public class EntityUser {
         /*Firebase intention*/
     }
 
-    public EntityUser(String displayName, List<String> contactList, Double altitude, Double longitude, String profilePicture) {
+    public EntityUser(String displayName, List<String> contactList, Double latitude, Double longitude, String profilePicture) {
         this.displayName = displayName;
         this.contactList = contactList;
-        this.altitude = altitude;
+        this.latitude = latitude;
         this.longitude = longitude;
         this.profilePictureUrl = profilePicture;
     }
 
-    public Double getAltitude() {
-        return altitude;
+    public Double getLatitude() {
+        return latitude;
     }
 
     public Double getLongitude() {
@@ -61,8 +59,8 @@ public class EntityUser {
         this.profilePictureUrl = profilePicture;
     }
 
-    public void setAltitude(Double altitude) {
-        this.altitude = altitude;
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
     }
 
     public void setLongitude(Double longitude) {

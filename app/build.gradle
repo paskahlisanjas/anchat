@@ -32,6 +32,11 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     compile 'com.google.firebase:firebase-core:11.0.4'
+
+    // firebase cloud messaging
+    compile 'com.google.firebase:firebase-messaging:11.0.4'
+
+    // firebase database
     compile 'com.google.firebase:firebase-database:11.0.4'
 
     // email & password auth firebase
