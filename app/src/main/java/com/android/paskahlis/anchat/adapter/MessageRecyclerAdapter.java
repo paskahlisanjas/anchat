@@ -11,8 +11,6 @@ import com.android.paskahlis.anchat.R;
 import com.android.paskahlis.anchat.entity.EntityChat;
 import com.android.paskahlis.anchat.entity.EntityChatContent;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 /**
@@ -37,7 +35,7 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageRecycler
     public void onBindViewHolder(ViewHolder holder, int position) {
         EntityChat chat = chatList.get(position);
         EntityChatContent content = chat.getContent();
-        if (content.getMessageContentType() == EntityChatContent.MESSAGE_CONTENT_TYPE_TEXT) {
+        if (content.getMessageType() == EntityChatContent.MESSAGE_CONTENT_TYPE_TEXT) {
             holder.containerFileIn.setVisibility(View.GONE);
             holder.containerFileOut.setVisibility(View.GONE);
             if (chat.getMessageDirection() == EntityChat.MESSAGE_DIRECTION_IN) {
@@ -45,7 +43,7 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageRecycler
                 holder.containerTextOut.setVisibility(View.GONE);
             } else {
                 holder.textOut.setText((String) content.getMessage());
-                holder.containerTextOut.setVisibility(View.GONE);
+                holder.containerTextIn.setVisibility(View.GONE);
             }
         } else {
             holder.containerTextOut.setVisibility(View.GONE);

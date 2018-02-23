@@ -7,16 +7,18 @@ import android.view.View;
  */
 
 public class EntityChatContentText extends EntityChatContent {
-    private final int MESSAGE_CONTENT_TYPE = MESSAGE_CONTENT_TYPE_TEXT;
+    private final static int MESSAGE_CONTENT_TYPE = MESSAGE_CONTENT_TYPE_TEXT;
 
     private String message;
 
+    public EntityChatContentText() {}
     public EntityChatContentText(String message) {
+        super(MESSAGE_CONTENT_TYPE);
         this.message = message;
     }
 
     @Override
-    public int getMessageContentType() {
+    public int getMessageType() {
         return MESSAGE_CONTENT_TYPE;
     }
 

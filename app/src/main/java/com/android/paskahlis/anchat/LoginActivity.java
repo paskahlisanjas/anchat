@@ -170,10 +170,10 @@ public class LoginActivity extends AppCompatActivity {
                                                         null, 0d, 0d,
                                                         account.getPhotoUrl().toString());
                                                 databaseReference.child(fu.getUid()).setValue(user);
-                                                Intent intent = new Intent(activity, MainActivity.class);
-                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                startActivity(intent);
                                             }
+                                            Intent intent = new Intent(activity, MainActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(intent);
                                         }
 
                                         @Override
@@ -213,6 +213,7 @@ public class LoginActivity extends AppCompatActivity {
                     account = result.getSignInAccount();
                     googleAuthentication(account);
                 } else {
+                    Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "Login with google failed.");
                 }
                 break;
