@@ -1,7 +1,5 @@
 ## TUGAS BESAR IF3111
-
 ## PENGEMBANGAN APLIKASI PADA PLATFORM KHUSUS
-
 ## Aplikasi chatting “AnChat”
 
 # Anjayz
