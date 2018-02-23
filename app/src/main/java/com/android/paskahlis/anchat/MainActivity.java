@@ -61,6 +61,27 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
     
+    @Override
+    public void onLocationChanged(Location location) {
+        locationText.setText("Latitude: " + location.getLatitude() + "\n Longitude: " + location.getLongitude());
+        distance = distance(location.getLatitude(),-5,location.getLongitude(),108);
+        if(distance<2000000){
+            userNearby.setText("Lala");
+        }
+        else{
+            userNearby.setText("No One");
+        }
+        try {
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            locationText.setText(locationText.getText() + "\n"+addresses.get(0).getAddressLine(0)+", "+
+                    addresses.get(0).getAddressLine(1)+", "+addresses.get(0).getAddressLine(2));
+        }catch(Exception e)
+        {
+
+        }
+
+    }
     void getLocation() {
         try {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
