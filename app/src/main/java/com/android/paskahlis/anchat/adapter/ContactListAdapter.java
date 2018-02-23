@@ -34,6 +34,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
             displayName   = itemView.findViewById(R.id.name);
             profilePic    = itemView.findViewById(R.id.profile_picture);
+            userStatus    = itemView.findViewById(R.id.status_message);
         }
     }
 
@@ -56,6 +57,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         EntityUser user = muser.get(position);
 
         holder.displayName.setText(user.getDisplayName());
+        holder.userStatus.setText(user.getStatus());
         if (user.getProfilePicture().equalsIgnoreCase("")){
             holder.profilePic.setBackgroundResource(R.drawable.default_profile_pic);
         } else {

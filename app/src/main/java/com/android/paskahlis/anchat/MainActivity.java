@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.android.paskahlis.anchat.adapter.MainViewPagerAdapter;
 import com.android.paskahlis.anchat.fragment.ChatFragment;
+import com.android.paskahlis.anchat.fragment.ContactFragment;
 import com.android.paskahlis.anchat.widget.NavBarViewPager;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                     mViewPager.setCurrentItem(0);
                     return true;
                 case R.id.navigation_chat:
-                    mViewPager.setCurrentItem(0);
+                    mViewPager.setCurrentItem(1);
                     return true;
                 case R.id.navigation_settings:
                     mViewPager.setCurrentItem(0);
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 //        getActionBar().setTitle("AnChat");
         mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager());
 
+        mainViewPagerAdapter.addFragment(ContactFragment.newInstance());
         mainViewPagerAdapter.addFragment(ChatFragment.newInstance());
         mViewPager = findViewById(R.id.main_view_pager);
 
