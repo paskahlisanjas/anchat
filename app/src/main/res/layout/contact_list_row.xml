@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -17,31 +18,20 @@
         android:layout_toRightOf="@id/profile_picture"
         android:text="nama"
         android:textStyle="bold"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:singleLine="true"
         android:layout_marginTop="@dimen/chat_list_item_margin"/>
     <TextView
-        android:id="@+id/chat_message"
+        android:id="@+id/status_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="ini isi chat"
+        android:textSize="18sp"
+        android:text="ini status"
         android:layout_alignParentStart="@id/name"
         android:layout_below="@id/name"
         android:layout_toRightOf="@id/profile_picture"
         android:layout_toLeftOf="@id/timestamp"
         android:layout_alignParentLeft="@id/name"
         android:layout_marginBottom="@dimen/chat_list_item_margin" />
-    <TextView
-        android:id="@+id/timestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/name"
-        android:layout_marginLeft="@dimen/chat_list_item_margin"
-        android:layout_marginRight="@dimen/chat_list_item_margin"
-        android:text="18:00"
-        android:textSize="14sp"
-        />
 
 </RelativeLayout>
