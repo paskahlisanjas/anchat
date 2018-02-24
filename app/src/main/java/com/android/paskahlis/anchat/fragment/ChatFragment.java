@@ -73,12 +73,12 @@ public class ChatFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
 
-        chatListRecyclerView    = rootView.findViewById(R.id.chat_list);
-        newChat                 = rootView.findViewById(R.id.new_chat);
+        chatListRecyclerView = rootView.findViewById(R.id.chat_list);
+        newChat = rootView.findViewById(R.id.new_chat);
 
         getChatFromDB();
 
-        mAdapter    = new ChatListAdapter(getActivity(), chatList);
+        mAdapter = new ChatListAdapter(getActivity(), chatList);
         mLayoutManager = new LinearLayoutManager(getActivity());
         chatListRecyclerView.setLayoutManager(mLayoutManager);
         chatListRecyclerView.addItemDecoration(new ChatListDivider(getActivity(), LinearLayoutManager.VERTICAL, 5));
@@ -88,7 +88,7 @@ public class ChatFragment extends Fragment {
                 new ClickListener() {
                     @Override
                     public void onClick(View view, int position) {
-                        Log.d("Recycle Onclick", "item ke : " + position+1);
+                        Log.d("Recycle Onclick", "item ke : " + position + 1);
                     }
 
                     @Override
@@ -100,7 +100,7 @@ public class ChatFragment extends Fragment {
         return rootView;
     }
 
-    private void getChatFromDB () {
+    private void getChatFromDB() {
         ChatListDBHelper db = new ChatListDBHelper(getActivity());
         ChatPreview chat = new ChatPreview();
         chat.setEmail("13515060@std.stei.itb.ac.id");
@@ -111,6 +111,7 @@ public class ChatFragment extends Fragment {
         db.addChat(chat);
         chatList = db.getAllChats();
     }
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);

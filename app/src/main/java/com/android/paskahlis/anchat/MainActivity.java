@@ -73,22 +73,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().setTitle("AnChat");
-//        getActionBar().setTitle("AnChat");
         mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager());
 
         mainViewPagerAdapter.addFragment(ContactFragment.newInstance());
         mainViewPagerAdapter.addFragment(ChatFragment.newInstance());
         mViewPager = findViewById(R.id.main_view_pager);
-
-
         mViewPager.setAdapter(mainViewPagerAdapter);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_chat);
-
-
-
     }
     
     /*@Override

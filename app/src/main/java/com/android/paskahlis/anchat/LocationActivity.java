@@ -78,7 +78,7 @@ public class LocationActivity extends AppCompatActivity implements LocationListe
     void getLocation() {
         try {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
         }
         catch(SecurityException e) {
             e.printStackTrace();

@@ -29,6 +29,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         private TextView userStatus;
         private CircleImageView profilePic;
 
+
         public UserViewHolder(View itemView) {
             super(itemView);
 
