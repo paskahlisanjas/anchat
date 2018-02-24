@@ -14,17 +14,19 @@ public class EntityUser {
     private Double latitude;
     private Double longitude;
     private String profilePictureUrl;
+    private String status;
 
     public EntityUser() {
         /*Firebase intention*/
     }
 
-    public EntityUser(String displayName, List<String> contactList, Double latitude, Double longitude, String profilePicture) {
+    public EntityUser(String displayName, List<String> contactList, Double latitude, Double longitude, String profilePicture,String status) {
         this.displayName = displayName;
         this.contactList = contactList;
         this.latitude = latitude;
         this.longitude = longitude;
         this.profilePictureUrl = profilePicture;
+        this.status = status;
     }
 
     public Double getLatitude() {
@@ -65,5 +67,13 @@ public class EntityUser {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
