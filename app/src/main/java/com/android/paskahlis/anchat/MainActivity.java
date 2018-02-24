@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
     
-    @Override
+    /*@Override
     public void onLocationChanged(Location location) {
         locationText.setText("Latitude: " + location.getLatitude() + "\n Longitude: " + location.getLongitude());
         distance = distance(location.getLatitude(),-5,location.getLongitude(),108);
@@ -105,6 +105,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onProviderEnabled(String provider) {
 
-    }
+    }*/
 
 }

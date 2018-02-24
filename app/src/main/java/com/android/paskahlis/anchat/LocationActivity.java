@@ -1,4 +1,5 @@
-package com.example.bethea.findnearbyuser;
+/*
+package com.android.paskahlis.anchat;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -26,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements LocationListener {
+public class LocationActivity extends AppCompatActivity implements LocationListener {
     Button getLocationBtn;
     TextView locationText,userNearby;
     double distance;
@@ -53,9 +54,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
 
-        getLocationBtn = (Button)findViewById(R.id.getLocationBtn);
+        */
+/*getLocationBtn = (Button)findViewById(R.id.getLocationBtn);
         locationText = (TextView)findViewById(R.id.locationText);
-        userNearby = (TextView)findViewById(R.id.UserNearby);
+        userNearby = (TextView)findViewById(R.id.UserNearby);*//*
+
 
         if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     void getLocation() {
         try {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
+//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
         }
         catch(SecurityException e) {
             e.printStackTrace();
@@ -106,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onProviderDisabled(String provider) {
-        Toast.makeText(MainActivity.this, "Please Enable GPS and Internet", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Please Enable GPS and Internet", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -118,4 +121,4 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public void onProviderEnabled(String provider) {
 
     }
-}
+}*/
