@@ -2,7 +2,7 @@
     <string name="app_name">anchat</string>
     <string name="don_t_have_an_account">Register manually</string>
     <string name="forgot_password">forgot password?</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">AnChat</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>

@@ -28,7 +28,7 @@ public class SplashActivity extends AppCompatActivity {
                 }
                 Intent intent;
                 if (firebaseAuth.getCurrentUser() != null) {
-                    intent  = new Intent(activity, ChatActivity.class);
+                    intent  = new Intent(activity, ShakeFriendActivity.class);
                 } else {
                     intent  = new Intent(activity, LoginActivity.class);
                 }
