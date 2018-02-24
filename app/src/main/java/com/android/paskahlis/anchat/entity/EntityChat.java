@@ -11,7 +11,7 @@ public class EntityChat {
     public static final int MESSAGE_DIRECTION_OUT = 3;
 
     public static final String NONE = "none";
-    public static final String ROOT = "chats";
+    public static final String CHAT_ROOT = "chats";
 
     private String mesageSender;
     private int messageDirection;

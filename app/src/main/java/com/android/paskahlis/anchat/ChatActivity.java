@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -12,10 +11,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.paskahlis.anchat.adapter.ChatListAdapter;
 import com.android.paskahlis.anchat.adapter.MessageRecyclerAdapter;
 import com.android.paskahlis.anchat.entity.EntityChat;
 import com.android.paskahlis.anchat.entity.EntityChatContent;
 import com.android.paskahlis.anchat.entity.EntityChatContentText;
+import com.android.paskahlis.anchat.entity.EntityUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -25,7 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
@@ -38,7 +38,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference reference = database.getReference().child(EntityChat.ROOT);
+    private DatabaseReference reference = database.getReference().child(EntityChat.CHAT_ROOT);
 
     private String target;
 
@@ -50,13 +50,34 @@ public class ChatActivity extends AppCompatActivity {
         editTextMessageInput = (EditText) findViewById(R.id.edit_text_message_input);
         buttonSendMessage = (Button) findViewById(R.id.button_send_message);
 
-        target = "fe9zHEwQuWOiXT4Fubc1H7MgtdU2";
+        target = getIntent().getStringExtra(ChatListAdapter.EXTRA_ID);
         firebaseAuth = FirebaseAuth.getInstance();
-        reference = reference.child(firebaseAuth.getCurrentUser().getUid()).child(target);
+        reference.child(EntityUser.USER_ROOT).child(target)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        getSupportActionBar().setTitle(dataSnapshot.getValue(EntityUser.class).getDisplayName());
+                    }
 
-        EntityChatContent content = new EntityChatContentText("Hey, hello!");
-        final EntityChat chat = new EntityChat(EntityChat.NONE, EntityChat.MESSAGE_DIRECTION_OUT, content);
-        chatList.add(chat);
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+        reference = reference.child(firebaseAuth.getCurrentUser().getUid()).child(target);
+        reference.child(firebaseAuth.getCurrentUser().getUid()).child(target)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
         recyclerAdapter = new MessageRecyclerAdapter(chatList);
         recyclerViewChatsContainer.setAdapter(recyclerAdapter);
         recyclerViewChatsContainer.setLayoutManager(new LinearLayoutManager(this));
@@ -65,12 +86,12 @@ public class ChatActivity extends AppCompatActivity {
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        EntityChatContent cont = new EntityChatContentText((String)dataSnapshot.getValue());
+/*                        EntityChatContent cont = new EntityChatContentText((String)dataSnapshot.getValue());
                         EntityChat ch = new EntityChat(target, EntityChat.MESSAGE_DIRECTION_IN, cont);
                         chatList.add(ch);
                         int newChatPosition = chatList.size() - 1;
                         recyclerAdapter.notifyItemInserted(newChatPosition);
-                        recyclerViewChatsContainer.scrollToPosition(newChatPosition);
+                        recyclerViewChatsContainer.scrollToPosition(newChatPosition);*/
                     }
 
                     @Override

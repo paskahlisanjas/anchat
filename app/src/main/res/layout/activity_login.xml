@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@drawable/box_rounded_stroke_white"
-                    android:hint="email address"
+                    android:hint="userId address"
                     android:inputType="textEmailAddress"
                     android:paddingBottom="8dp"
                     android:paddingEnd="16dp"

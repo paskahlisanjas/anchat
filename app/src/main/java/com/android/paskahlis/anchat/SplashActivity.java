@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.util.Log;
 
-import com.android.paskahlis.anchat.prefs.UserPrefs;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -37,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
                 if (firebaseAuth.getCurrentUser() != null) {
                     intent  = new Intent(activity, MainActivity.class);
                 } else {
-                    intent  = new Intent(activity, MainActivity.class);
+                    intent  = new Intent(activity, LoginActivity.class);
                 }
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 

@@ -21,7 +21,7 @@ Sistem yang akan dibuat yaitu aplikasi Android yang dapat mengirim dan menerima 
 
 Aplikasi dapat menerima pesan dari server (jika tersedia koneksi internet).
 Aplikasi dapat mengirim pesan  ke server (jika tersedia koneksi internet).
-Pengguna dapat mendaftarkan akun ke aplikasi dengan email
+Pengguna dapat mendaftarkan akun ke aplikasi dengan userId
 Pengguna dapat login ke aplikasi dengan ajun google atau facebook
 Aplikasi dapat menampilkan notifikasi chat yang masuk
 Aplikasi dapat mencari teman di sekitar lokasi dengan GPS.

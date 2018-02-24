@@ -4,8 +4,6 @@ import android.util.Log;
 
 import com.android.paskahlis.anchat.database.ChatListDBHelper;
 import com.android.paskahlis.anchat.model.ChatPreview;
-import com.android.paskahlis.anchat.widget.ChatListDivider;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -20,7 +18,7 @@ public class MessagingService extends FirebaseMessagingService {
         ChatListDBHelper db = new ChatListDBHelper(getApplicationContext());
 
         ChatPreview chat = new ChatPreview();
-        chat.setEmail(remoteMessage.getFrom());
+        chat.setUserId(remoteMessage.getFrom());
         chat.setName("fajar");
         chat.setTextChat(remoteMessage.getNotification().getBody());
         chat.setTimestamp(String.valueOf(remoteMessage.getSentTime()));

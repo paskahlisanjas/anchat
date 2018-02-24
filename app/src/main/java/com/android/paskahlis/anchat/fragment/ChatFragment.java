@@ -1,12 +1,14 @@
 package com.android.paskahlis.anchat.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,11 +18,19 @@ import android.view.ViewGroup;
 
 import com.android.paskahlis.anchat.R;
 import com.android.paskahlis.anchat.adapter.ChatListAdapter;
-import com.android.paskahlis.anchat.database.ChatListDBHelper;
+import com.android.paskahlis.anchat.entity.EntityChat;
+import com.android.paskahlis.anchat.entity.EntityUser;
+import com.android.paskahlis.anchat.entity.FirebaseEntityChat;
 import com.android.paskahlis.anchat.listener.ClickListener;
 import com.android.paskahlis.anchat.listener.RecyclerTouchListener;
 import com.android.paskahlis.anchat.model.ChatPreview;
 import com.android.paskahlis.anchat.widget.ChatListDivider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +48,12 @@ public class ChatFragment extends Fragment {
     private RecyclerView chatListRecyclerView;
     private FloatingActionButton newChat;
     private ChatListAdapter mAdapter;
-    private List<ChatPreview> chatList = null;
+    private List<ChatPreview> chatList = new ArrayList<>();
     private RecyclerView.LayoutManager mLayoutManager;
 
+    private FirebaseAuth auth;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference reference = database.getReference();
 
     private OnFragmentInteractionListener mListener;
 
@@ -73,10 +86,12 @@ public class ChatFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
 
+        auth = FirebaseAuth.getInstance();
         chatListRecyclerView = rootView.findViewById(R.id.chat_list);
         newChat = rootView.findViewById(R.id.new_chat);
 
         getChatFromDB();
+
 
         mAdapter = new ChatListAdapter(getActivity(), chatList);
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -101,15 +116,69 @@ public class ChatFragment extends Fragment {
     }
 
     private void getChatFromDB() {
-        ChatListDBHelper db = new ChatListDBHelper(getActivity());
+        /*ChatListDBHelper db = new ChatListDBHelper(getActivity());
         ChatPreview chat = new ChatPreview();
-        chat.setEmail("13515060@std.stei.itb.ac.id");
+        chat.setUserId("13515060@std.stei.itb.ac.id");
         chat.setName("Fajar");
         chat.setProfilePic("");
         chat.setTextChat("Halo");
         chat.setTimestamp("19:08");
         db.addChat(chat);
-        chatList = db.getAllChats();
+        chatList = db.getAllChats();*/
+        Log.d("ANCHAT", "getChatFromDb(), uid = " + auth.getCurrentUser().getUid());
+        final ProgressDialog pDialog = new ProgressDialog(getActivity());
+        pDialog.setMessage("proccessing...");
+        pDialog.show();
+        reference.child(EntityChat.CHAT_ROOT).child(auth.getCurrentUser().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.d("ANCHAT", "onDataChange() : uid = " + dataSnapshot.getKey());
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            pDialog.show();
+                            final ChatPreview preview = new ChatPreview();
+                            DataSnapshot lastChat = null;
+                            for (DataSnapshot grandChild : child.getChildren()) {
+                                Log.d("ANCHAT", "grandChild = " + grandChild.getKey());
+                                lastChat = grandChild;
+                            }
+                            if (lastChat == null) return;
+                            FirebaseEntityChat chat = lastChat.getValue(FirebaseEntityChat.class);
+                            preview.setUserId(child.getKey());
+                            preview.setTimestamp(lastChat.getKey());
+                            preview.setTextChat(chat.getText());
+                            preview.setProfilePic("");
+                            Log.d("ANCHAT", "retrieving user ...");
+                            reference.child(EntityUser.USER_ROOT).child(preview.getUserId())
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            EntityUser user = dataSnapshot.getValue(EntityUser.class);
+                                            preview.setName(user.getDisplayName());
+                                            Log.d("ANCHAT", "everything is done.");
+                                            chatList.add(preview);
+                                            int newChatPosition = chatList.size() - 1;
+                                            mAdapter.notifyItemInserted(newChatPosition);
+                                            preview.setProfilePic(
+                                                    user.getProfilePicture() == null ? ""
+                                                            : user.getProfilePicture()
+                                            );
+                                            pDialog.cancel();
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     public void onButtonPressed(Uri uri) {

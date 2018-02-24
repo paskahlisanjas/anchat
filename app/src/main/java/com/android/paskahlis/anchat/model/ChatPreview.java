@@ -1,8 +1,5 @@
 package com.android.paskahlis.anchat.model;
 
-import java.util.Date;
-import java.util.Timer;
-
 /**
  * Created by fajar on 22/02/18.
  */
@@ -12,14 +9,14 @@ public class ChatPreview {
     private String name;
     private String textChat;
     private String timestamp;
-    private String email;
+    private String userId;
 
-    public String getEmail() {
-        return email;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getProfilePic() {

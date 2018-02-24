@@ -6,10 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.paskahlis.anchat.ChatActivity;
 import com.android.paskahlis.anchat.R;
@@ -25,6 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatViewHolder> {
+    public static String EXTRA_ID = "user_id";
 
     private List<ChatPreview> mChat = null;
     private Context mContext;
@@ -64,12 +63,12 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
     @Override
     public void onBindViewHolder(ChatViewHolder holder, final int position) {
 
-        ChatPreview chat = mChat.get(position);
+        final ChatPreview chat = mChat.get(position);
 
         holder.senderName.setText(chat.getName());
         holder.chatMessage.setText(chat.getTextChat());
         holder.timestamp.setText(chat.getTimestamp());
-        if (chat.getProfilePic().equalsIgnoreCase("")) {
+        if (chat.getProfilePic().equals("")) {
             holder.senderProfilePic.setBackgroundResource(R.drawable.default_profile_pic);
         } else {
             Glide.with(mContext).load(chat.getProfilePic()).into(holder.senderProfilePic);
@@ -77,7 +76,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "Clicked : " + position, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mContext, ChatActivity.class);
+                intent.putExtra(EXTRA_ID, chat.getUserId());
+                mContext.startActivity(intent);
             }
         });
     }

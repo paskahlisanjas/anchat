@@ -5,7 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.paskahlis.anchat.entity.EntityUser;
 import com.android.paskahlis.anchat.R;
@@ -28,7 +30,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         private TextView displayName;
         private TextView userStatus;
         private CircleImageView profilePic;
-
+        private RelativeLayout container;
 
         public UserViewHolder(View itemView) {
             super(itemView);
@@ -36,6 +38,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             displayName   = itemView.findViewById(R.id.name);
             profilePic    = itemView.findViewById(R.id.profile_picture);
             userStatus    = itemView.findViewById(R.id.status_message);
+            container = itemView.findViewById(R.id.container_contact_list);
         }
     }
 
@@ -53,7 +56,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(UserViewHolder holder, int position) {
+    public void onBindViewHolder(UserViewHolder holder, final int position) {
 
         EntityUser user = muser.get(position);
 
@@ -64,7 +67,12 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         } else {
             Glide.with(mContext).load(user.getProfilePicture()).into(holder.profilePic);
         }
-
+        holder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mContext, "Clicked : " + position, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

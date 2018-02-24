@@ -53,7 +53,7 @@ public class ChatListDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_EMAIL, chat.getEmail());
+        values.put(KEY_EMAIL, chat.getUserId());
         values.put(KEY_NAME, chat.getName());
         values.put(KEY_PIC, chat.getProfilePic());
         values.put(KEY_CHAT, chat.getTextChat());
@@ -84,7 +84,7 @@ public class ChatListDBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 ChatPreview chat = new ChatPreview();
-                chat.setEmail(cursor.getString(0));
+                chat.setUserId(cursor.getString(0));
                 chat.setName(cursor.getString(1));
                 chat.setProfilePic(cursor.getString(2));
                 chat.setTextChat(cursor.getString(3));
