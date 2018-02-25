@@ -45,9 +45,9 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:11.0.4'
     // CircleImageView
     compile 'de.hdodenhof:circleimageview:2.2.0'
+
     implementation files('libs/glide-3.7.0.jar')
     implementation files('libs/gson-2.8.2.jar')
-//    implementation files('libs/firebase-admin-5.9.0.jar')
 }
 
 

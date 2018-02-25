@@ -1,5 +1,6 @@
 package com.android.paskahlis.anchat;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ public class NewFriend extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0 :
-
+                        startActivity(new Intent(getApplicationContext(), ShakeFriendActivity.class));
                         break;
                     case 1 :
 
