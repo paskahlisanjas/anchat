@@ -1,6 +1,9 @@
 package com.android.paskahlis.anchat.fragment;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,13 +15,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.android.paskahlis.anchat.ChatActivity;
+import com.android.paskahlis.anchat.NewFriend;
 import com.android.paskahlis.anchat.R;
 import com.android.paskahlis.anchat.adapter.ContactListAdapter;
 import com.android.paskahlis.anchat.entity.EntityUser;
 import com.android.paskahlis.anchat.listener.ClickListener;
 import com.android.paskahlis.anchat.listener.RecyclerTouchListener;
 import com.android.paskahlis.anchat.widget.ChatListDivider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +44,18 @@ public class ContactFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private FirebaseAuth auth;
+    private FirebaseDatabase db = FirebaseDatabase.getInstance();
+    private DatabaseReference dbReference = db.getReference();
+
     private OnFragmentInteractionListener mListener;
 
     private RecyclerView contactRecyclerView;
     private ContactListAdapter mAdapter;
-    private List<EntityUser> contactList;
+    private List<EntityUser> contactList = new ArrayList<>();
     private RecyclerView.LayoutManager mLayoutManager;
     private FloatingActionButton addFriend;
+    private List<String> keyList = new ArrayList<>();
 
     public ContactFragment() {
         // Required empty public constructor
@@ -70,10 +87,12 @@ public class ContactFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_contact, container, false);
 
         contactRecyclerView = rootView.findViewById(R.id.contact_list);
-        addFriend           = rootView.findViewById(R.id.add_friend);
+        addFriend = rootView.findViewById(R.id.add_friend);
+        auth = FirebaseAuth.getInstance();
+        String selfId = auth.getCurrentUser().getUid();
 
-        addContactDummy();
-        mAdapter    = new ContactListAdapter(getActivity(), contactList);
+        getAllContact(selfId);
+        mAdapter = new ContactListAdapter(getActivity(), contactList);
         mLayoutManager = new LinearLayoutManager(getActivity());
         contactRecyclerView.setLayoutManager(mLayoutManager);
         contactRecyclerView.addItemDecoration(new ChatListDivider(getActivity(), LinearLayoutManager.VERTICAL, 5));
@@ -84,7 +103,9 @@ public class ContactFragment extends Fragment {
                 new ClickListener() {
                     @Override
                     public void onClick(View view, int position) {
-                        Log.d("Recycle Onclick", "item ke : " + position);
+                        Intent intent = new Intent(getActivity(), ChatActivity.class);
+                        intent.putExtra(ChatActivity.EXTRA_ID, keyList.get(position));
+                        startActivity(intent);
                     }
 
                     @Override
@@ -92,6 +113,12 @@ public class ContactFragment extends Fragment {
 
                     }
                 }));
+        addFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), NewFriend.class));
+            }
+        });
         return rootView;
     }
 
@@ -101,12 +128,49 @@ public class ContactFragment extends Fragment {
         }
     }
 
-    private void addContactDummy(){
-        contactList = new ArrayList<>();
-        EntityUser fajar = new EntityUser("Fajar Nugroho", null, 7.937193, 8.782781, "", "Sibuk");
-        EntityUser bethea = new EntityUser("Bethea", null, 7.937193, 8.782781, "", "Gabut");
-        contactList.add(fajar);
-        contactList.add(bethea);
+    private void getAllContact(String selfId) {
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Fetching...");
+        dialog.show();
+        Log.d("ANCHAT", "addValuesEventListener...");
+        dbReference.child(EntityUser.USER_ROOT).child(selfId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        dialog.dismiss();
+                        EntityUser user = dataSnapshot.getValue(EntityUser.class);
+                        List<String> contacts = user.getContactList();
+                        if (contacts == null) return;
+                        for (String contact : contacts) {
+                            dialog.show();
+                            dbReference.child(EntityUser.USER_ROOT).child(contact)
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            dialog.dismiss();
+                                            EntityUser friend = dataSnapshot.getValue(EntityUser.class);
+                                            contactList.add(friend);
+                                            keyList.add(dataSnapshot.getKey());
+                                            mAdapter.notifyItemInserted(contactList.size() - 1);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                            dialog.dismiss();
+                                            Toast.makeText(getActivity(), "Something went wrong.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        dialog.dismiss();
+                        Toast.makeText(getActivity(), "Something went wrong.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override

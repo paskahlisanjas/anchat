@@ -43,6 +43,7 @@ import java.util.Date;
 import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
+    public static String EXTRA_ID = "user_id";
     private final int ATTACH_FILE_RC = 1998;
 
     private RecyclerView recyclerViewChatsContainer;
@@ -70,7 +71,7 @@ public class ChatActivity extends AppCompatActivity {
         buttonSendMessage = (Button) findViewById(R.id.button_send_message);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        target = getIntent().getStringExtra(ChatListAdapter.EXTRA_ID);
+        target = getIntent().getStringExtra(EXTRA_ID);
         self = firebaseAuth.getCurrentUser().getUid();
         dbReference.child(EntityUser.USER_ROOT).child(target)
                 .addListenerForSingleValueEvent(new ValueEventListener() {

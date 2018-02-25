@@ -62,7 +62,8 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
         holder.displayName.setText(user.getDisplayName());
         holder.userStatus.setText(user.getStatus());
-        if (user.getProfilePicture().equalsIgnoreCase("")){
+        String pp = user.getProfilePicture() == null ? "" : user.getProfilePicture();
+        if (pp.equalsIgnoreCase("")){
             holder.profilePic.setBackgroundResource(R.drawable.default_profile_pic);
         } else {
             Glide.with(mContext).load(user.getProfilePicture()).into(holder.profilePic);

@@ -1,5 +1,6 @@
 package com.android.paskahlis.anchat.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ public class EntityUser {
     public static final String USER_ROOT = "users";
 
     private String displayName;
-    private List<String> contactList;
+    private List<String> contactList = new ArrayList<>();
     private Double latitude;
     private Double longitude;
     private String profilePictureUrl;
@@ -75,5 +76,9 @@ public class EntityUser {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void addContact(String contact) {
+        contactList.add(contact);
     }
 }

@@ -23,8 +23,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatViewHolder> {
-    public static String EXTRA_ID = "user_id";
-
     private List<ChatPreview> mChat = null;
     private Context mContext;
 
@@ -77,7 +75,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, ChatActivity.class);
-                intent.putExtra(EXTRA_ID, chat.getUserId());
+                intent.putExtra(ChatActivity.EXTRA_ID, chat.getUserId());
                 mContext.startActivity(intent);
             }
         });

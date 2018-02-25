@@ -114,7 +114,6 @@ public class ChatFragment extends Fragment {
         newChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("ANCHAT", "button clicked");
                 startActivity(new Intent(getActivity(), NewFriend.class));
             }
         });
