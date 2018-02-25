@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.paskahlis.anchat.NewFriend;
 import com.android.paskahlis.anchat.R;
 import com.android.paskahlis.anchat.adapter.ChatListAdapter;
 import com.android.paskahlis.anchat.entity.EntityUser;
@@ -110,7 +111,13 @@ public class ChatFragment extends Fragment {
 
                     }
                 }));
-
+        newChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("ANCHAT", "button clicked");
+                startActivity(new Intent(getActivity(), NewFriend.class));
+            }
+        });
         return rootView;
     }
 
@@ -138,7 +145,6 @@ public class ChatFragment extends Fragment {
                             Log.d("ANCHAT", "may have no children");
                             return;
                         }
-                        Log.d("ANCHAT", "onDataChange() : uid = " + dataSnapshot.getKey());
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                             pDialog.show();
                             final ChatPreview preview = new ChatPreview();
@@ -161,7 +167,6 @@ public class ChatFragment extends Fragment {
                                             pDialog.cancel();
                                             EntityUser user = dataSnapshot.getValue(EntityUser.class);
                                             preview.setName(user.getDisplayName());
-                                            Log.d("ANCHAT", "everything is done.");
                                             chatList.add(preview);
                                             int newChatPosition = chatList.size() - 1;
                                             mAdapter.notifyItemInserted(newChatPosition);
