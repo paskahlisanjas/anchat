@@ -1,27 +1,50 @@
 package com.android.paskahlis.anchat.adapter;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.paskahlis.anchat.R;
-import com.android.paskahlis.anchat.entity.EntityChat;
-import com.android.paskahlis.anchat.entity.EntityChatContent;
+import com.android.paskahlis.anchat.entity.FirebaseEntityChat;
+import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
+
+import static android.view.View.GONE;
 
 /**
  * Created by paskahlis on 22/02/2018.
  */
 
 public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageRecyclerAdapter.ViewHolder> {
-    private List<EntityChat> chatList;
+    private List<FirebaseEntityChat> chatList;
+    private Context context;
+    private ProgressDialog pDialog;
 
-    public MessageRecyclerAdapter(List<EntityChat> chatList) {
+    public MessageRecyclerAdapter(Context context, List<FirebaseEntityChat> chatList) {
+        this.context = context;
         this.chatList = chatList;
+        pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Downloading...");
     }
 
     @Override
@@ -33,27 +56,40 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageRecycler
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        EntityChat chat = chatList.get(position);
-        EntityChatContent content = chat.getContent();
-        if (content.getMessageType() == EntityChatContent.MESSAGE_CONTENT_TYPE_TEXT) {
-            holder.containerFileIn.setVisibility(View.GONE);
-            holder.containerFileOut.setVisibility(View.GONE);
-            if (chat.getMessageDirection() == EntityChat.MESSAGE_DIRECTION_IN) {
-                holder.textIn.setText((String) content.getMessage());
-                holder.containerTextOut.setVisibility(View.GONE);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        final FirebaseEntityChat chat = chatList.get(position);
+        if (chat.getSender().equals(auth.getCurrentUser().getUid())) {
+            holder.containerFileIn.setVisibility(GONE);
+            holder.containerTextIn.setVisibility(GONE);
+            if (chat.getContent().equals("-")) {
+                holder.containerFileOut.setVisibility(GONE);
+                holder.textOut.setText(chat.getText());
             } else {
-                holder.textOut.setText((String) content.getMessage());
-                holder.containerTextIn.setVisibility(View.GONE);
+                holder.containerFileOut.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        pDialog.show();
+                        new DownloadFileFromUrl().execute(chat.getContent(), chat.getText());
+                    }
+                });
+                holder.containerTextOut.setVisibility(GONE);
+                holder.filenameOut.setText(chat.getText());
             }
         } else {
-            holder.containerTextOut.setVisibility(View.GONE);
-            holder.containerTextIn.setVisibility(View.GONE);
-            if (chat.getMessageDirection() == EntityChat.MESSAGE_DIRECTION_IN) {
-                holder.containerFileOut.setVisibility(View.GONE);
-                holder.fileNameIn.setText((String) content.getMessage());
+            holder.containerTextOut.setVisibility(GONE);
+            holder.containerFileOut.setVisibility(GONE);
+            if (chat.getContent().equals(FirebaseEntityChat.CONTENT_NONE)) {
+                holder.containerFileIn.setVisibility(GONE);
+                holder.textIn.setText(chat.getText());
             } else {
-                holder.containerFileIn.setVisibility(View.GONE);
-                holder.filenameOut.setText((String) content.getMessage());
+                holder.containerFileIn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new DownloadFileFromUrl().execute(chat.getContent(), chat.getText());
+                    }
+                });
+                holder.containerTextIn.setVisibility(GONE);
+                holder.fileNameIn.setText(chat.getText());
             }
         }
     }
@@ -81,5 +117,38 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageRecycler
         }
     }
 
+    class DownloadFileFromUrl extends AsyncTask<String, String, String> {
 
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                URL url = new URL(strings[0]);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+                InputStream iStream = new BufferedInputStream(url.openStream(), 8129);
+                String path = Environment.getExternalStorageDirectory().toString() + "/" + strings[1];
+                OutputStream oStream = new FileOutputStream(path);
+                byte[] data = new byte[1024];
+                int count;
+                while ((count = iStream.read(data)) != -1) {
+                    oStream.write(data, 0, count);
+                }
+                oStream.flush();
+                oStream.close();
+                iStream.close();
+                pDialog.cancel();
+                File file = new File(path);
+                String mime = context.getContentResolver().getType(Uri.fromFile(file));
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(file), mime);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                context.startActivity(intent);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
 }

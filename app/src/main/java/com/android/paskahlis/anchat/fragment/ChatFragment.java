@@ -15,10 +15,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.paskahlis.anchat.R;
 import com.android.paskahlis.anchat.adapter.ChatListAdapter;
-import com.android.paskahlis.anchat.entity.EntityChat;
 import com.android.paskahlis.anchat.entity.EntityUser;
 import com.android.paskahlis.anchat.entity.FirebaseEntityChat;
 import com.android.paskahlis.anchat.listener.ClickListener;
@@ -92,7 +92,6 @@ public class ChatFragment extends Fragment {
 
         getChatFromDB();
 
-
         mAdapter = new ChatListAdapter(getActivity(), chatList);
         mLayoutManager = new LinearLayoutManager(getActivity());
         chatListRecyclerView.setLayoutManager(mLayoutManager);
@@ -127,12 +126,18 @@ public class ChatFragment extends Fragment {
         chatList = db.getAllChats();*/
         Log.d("ANCHAT", "getChatFromDb(), uid = " + auth.getCurrentUser().getUid());
         final ProgressDialog pDialog = new ProgressDialog(getActivity());
-        pDialog.setMessage("proccessing...");
+        pDialog.setMessage("fetching message...");
         pDialog.show();
-        reference.child(EntityChat.CHAT_ROOT).child(auth.getCurrentUser().getUid())
-                .addValueEventListener(new ValueEventListener() {
+
+        reference.child(FirebaseEntityChat.CHAT_ROOT).child(auth.getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        pDialog.cancel();
+                        if (!dataSnapshot.hasChildren()) {
+                            Log.d("ANCHAT", "may have no children");
+                            return;
+                        }
                         Log.d("ANCHAT", "onDataChange() : uid = " + dataSnapshot.getKey());
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                             pDialog.show();
@@ -145,7 +150,7 @@ public class ChatFragment extends Fragment {
                             if (lastChat == null) return;
                             FirebaseEntityChat chat = lastChat.getValue(FirebaseEntityChat.class);
                             preview.setUserId(child.getKey());
-                            preview.setTimestamp(lastChat.getKey());
+                            preview.setTimestamp(lastChat.getKey().split(" | ")[2]);
                             preview.setTextChat(chat.getText());
                             preview.setProfilePic("");
                             Log.d("ANCHAT", "retrieving user ...");
@@ -153,6 +158,7 @@ public class ChatFragment extends Fragment {
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
+                                            pDialog.cancel();
                                             EntityUser user = dataSnapshot.getValue(EntityUser.class);
                                             preview.setName(user.getDisplayName());
                                             Log.d("ANCHAT", "everything is done.");
@@ -163,7 +169,6 @@ public class ChatFragment extends Fragment {
                                                     user.getProfilePicture() == null ? ""
                                                             : user.getProfilePicture()
                                             );
-                                            pDialog.cancel();
                                         }
 
                                         @Override
@@ -176,9 +181,12 @@ public class ChatFragment extends Fragment {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        pDialog.cancel();
+                        Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT)
+                                .show();
                     }
                 });
+
     }
 
     public void onButtonPressed(Uri uri) {
