@@ -18,9 +18,14 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.android.paskahlis.anchat.adapter.MainViewPagerAdapter;
+import com.android.paskahlis.anchat.entity.EntityUser;
 import com.android.paskahlis.anchat.fragment.ChatFragment;
 import com.android.paskahlis.anchat.fragment.ContactFragment;
+import com.android.paskahlis.anchat.service.MessagingInstanceIdService;
 import com.android.paskahlis.anchat.widget.NavBarViewPager;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
@@ -32,6 +37,11 @@ public class MainActivity extends AppCompatActivity {
     private NavBarViewPager mViewPager;
     private List<Fragment> mFrags;
 
+    private FirebaseAuth auth;
+    private FirebaseDatabase db = FirebaseDatabase.getInstance();
+    private DatabaseReference dbReference = db.getReference();
+
+    private String selfId;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -73,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        auth = FirebaseAuth.getInstance();
+        selfId = auth.getCurrentUser().getUid();
+
         getSupportActionBar().setTitle("AnChat");
         mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager());
 
@@ -85,7 +98,17 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_chat);
     }
-    
+
+    private void initMessaging() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        registerUserMessagingToken(token);
+    }
+
+    private void registerUserMessagingToken(String token) {
+        dbReference.child(EntityUser.USER_ROOT).child(selfId).child(EntityUser.USER_MSG_TOKEN)
+                .setValue(token);
+    }
+
     /*@Override
     public void onLocationChanged(Location location) {
         locationText.setText("Latitude: " + location.getLatitude() + "\n Longitude: " + location.getLongitude());

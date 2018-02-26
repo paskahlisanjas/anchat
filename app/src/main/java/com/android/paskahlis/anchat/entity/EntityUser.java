@@ -9,13 +9,15 @@ import java.util.List;
 
 public class EntityUser {
     public static final String USER_ROOT = "users";
+    public static final String USER_MSG_TOKEN = "msgToken";
 
-    private String displayName;
+    private String displayName = "";
     private List<String> contactList = new ArrayList<>();
-    private Double latitude;
-    private Double longitude;
-    private String profilePictureUrl;
-    private String status;
+    private Double latitude = 0d;
+    private Double longitude = 0d;
+    private String profilePictureUrl = "";
+    private String status = "";
+    private String msgToken = "";
 
     public EntityUser() {
         /*Firebase intention*/
@@ -80,5 +82,13 @@ public class EntityUser {
 
     public void addContact(String contact) {
         contactList.add(contact);
+    }
+
+    public void setMsgToken(String token) {
+        msgToken = token;
+    }
+
+    public String getMsgToken() {
+        return msgToken;
     }
 }
